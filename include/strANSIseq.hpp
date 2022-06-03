@@ -38,7 +38,7 @@ enum FORMAT
 };
 
 std::string
-format(std::string v, std::initializer_list<int> l);
+fstr(std::string v, std::initializer_list<int> l);
 
 std::string
 move_type(int n, char type);

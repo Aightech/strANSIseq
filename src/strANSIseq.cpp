@@ -5,12 +5,13 @@ namespace ESC
 {
 
 std::string
-format(std::string v, std::initializer_list<int> l)
+fstr(std::string v, std::initializer_list<int> l)
 {
     std::string seq_str = "\x1b[";
     for(auto i : l) seq_str += ";" + std::to_string(i);
     return seq_str + "m" + v + "\x1b[0m";
 }
+
 
 std::string
 move_type(int n, char type)

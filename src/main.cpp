@@ -5,7 +5,7 @@ int
 main(int argc, char **argv)
 {
 
-  std::cout << "hello " << ESC::format("hey", {ESC::STRIKE, ESC::FG_CYAN})
+  std::cout << "hello " << ESC::fstr("hey", {ESC::STRIKE, ESC::FG_CYAN})
          << " hello" << std::endl
          << std::endl;
 
