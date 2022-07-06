@@ -3,40 +3,52 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief This namespace contains all the functions to print formated (colored, striked, blinking) text.
+ *
+ */
 namespace ESC
 {
+/*! This enum contains all the ANSI escape sequences. */
 enum FORMAT
 {
-    BOLD = 1,
-    DIM = 2,
-    ITALIC = 3,
-    UNDERLINE = 4,
-    BLINK_SLOW = 5,
-    BLINK_FAST = 6,
-    REVERSE = 7,
-    HIDDEN = 8,
-    STRIKE = 9,
+    BOLD = 1, //!< Bold text. 
+    DIM = 2, //!< Dim text.
+    ITALIC = 3, //!< Italic text.
+    UNDERLINE = 4, //!< Underlined text.
+    BLINK_SLOW = 5, //!< Slow blinking text.
+    BLINK_FAST = 6, //!< Fast blinking text.
+    REVERSE = 7, //!< Reversed text.
+    HIDDEN = 8, //!< Hidden text.
+    STRIKE = 9, //!< Striked text.
 
-    FG_BLACK = 30,
-    BG_BLACK = 40,
-    FG_RED = 31,
-    BG_RED = 41,
-    FG_GREEN = 32,
-    BG_GREEN = 42,
-    FG_YELLOW = 33,
-    BG_YELLOW = 43,
-    FG_BLUE = 34,
-    BG_BLUE = 44,
-    FG_MAGENTA = 35,
-    BG_MAGENTA = 45,
-    FG_CYAN = 36,
-    BG_CYAN = 46,
-    FG_WHITE = 37,
-    BG_WHITE = 47,
-    FG_DEFAULT = 39,
-    BG_DEFAULT = 49
+    FG_BLACK = 30, //!< Black foreground.
+    BG_BLACK = 40, //!< Black background. 
+    FG_RED = 31, //!< Red foreground.
+    BG_RED = 41, //!< Red background.
+    FG_GREEN = 32, //!< Green foreground.
+    BG_GREEN = 42, //!< Green background.
+    FG_YELLOW = 33, //!< Yellow foreground.
+    BG_YELLOW = 43, //!< Yellow background.
+    FG_BLUE = 34, //!< Blue foreground.
+    BG_BLUE = 44, //!< Blue background.
+    FG_MAGENTA = 35, //!< Magenta foreground.
+    BG_MAGENTA = 45, //!< Magenta background.
+    FG_CYAN = 36, //!< Cyan foreground.
+    BG_CYAN = 46, //!< Cyan background.
+    FG_WHITE = 37, //!< White foreground.
+    BG_WHITE = 47, //!< White background.
+    FG_DEFAULT = 39, //!< Default foreground.
+    BG_DEFAULT = 49 //!< Default background.
 };
 
+/**
+ * @brief fstr Prints a formated string.
+ * 
+ * @param v String to format.
+ * @param l List of ANSI format parameters.
+ * @return std::string Returns the formated string.
+ */
 std::string
 fstr(std::string v, std::initializer_list<int> l);
 
