@@ -3,6 +3,13 @@
 #include <string>
 #include <vector>
 
+#define LOG(...)             \
+    if(m_verbose)            \
+    {                        \
+        printf(__VA_ARGS__); \
+        fflush(stdout);      \
+    }
+
 /**
  * @brief This namespace contains all the functions to print formated (colored, striked, blinking) text.
  *
