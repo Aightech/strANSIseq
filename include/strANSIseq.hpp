@@ -1,3 +1,6 @@
+#ifndef STR_ANSI_SEQ_HPP
+#define STR_ANSI_SEQ_HPP
+
 #include <cstdarg>
 #include <iostream>
 #include <string>
@@ -77,3 +80,5 @@ move_left(int n = 1);
 std::string
 move_to(int line, int column);
 }; // namespace ESC
+
+#endif //STR_ANSI_SEQ_HPP
