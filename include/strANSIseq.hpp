@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unistd.h>
+#include <termios.h>
 
 #define LOG(...)             \
     if(m_verbose)            \
@@ -67,6 +69,8 @@ std::string fstr_n(T v, std::initializer_list<int> l)
     return fstr(std::to_string(v), l);
 };
 
+std::string fstr_link(std::string link, std::string text = "");
+
 std::string move_type(int n, char type);
 
 std::string move_up(int n = 1);
@@ -79,15 +83,21 @@ std::string move_left(int n = 1);
 
 std::string move_to(int line, int column);
 
+int get_pos(int *y, int *x);
+
 class CLI
 {
     public:
     CLI(int verbose, std::string id)
     {
+        if(verbose > s_verbose_max)
+            s_verbose_max = verbose;
         m_verbose = verbose;
-        m_id = "[Joystick]";
-        m_indent = std::string(verbose, '\t');
+        if(verbose >= 0 && verbose < 9)
+            m_id = fstr(id, {FG_YELLOW + verbose});
     };
+
+    std::string &cli_id() { return m_id; };
 
     void log(std::string msg, bool id = false)
     {
@@ -102,17 +112,31 @@ class CLI
     {
         if(m_verbose)
         {
-            printf("%s", msg.c_str());
-            fflush(stdout);
+            if(id)
+	      {
+                printf("[%s]", m_id.c_str());
+		fflush(stdout);
+		int x;
+		get_pos(&x, &m_indent);
+		printf(" %s\n", msg.c_str());
+	      }
+            else
+                printf("%*s%s\n", m_indent, "", msg.c_str());
+
         }
     };
 
-    std::string log_error(std::string msg) { return msg; };
+    std::string log_error(std::string msg)
+    {
+        return "[" + m_id + "] " + fstr("ERROR: ", {BOLD, FG_RED}) + msg;
+    };
+
+    static int s_verbose_max;
 
     private:
     int m_verbose;
     std::string m_id;
-    std::string m_indent;
+    int m_indent=10;
 };
 }; // namespace ESC
 
