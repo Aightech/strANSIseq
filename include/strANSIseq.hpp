@@ -103,7 +103,10 @@ class CLI
     {
         if(m_verbose)
         {
-            printf("%s", msg.c_str());
+            if(id)
+                printf("%*s%s", m_indent, "", msg.c_str());
+            else
+                printf("%s", msg.c_str());
             fflush(stdout);
         }
     };
