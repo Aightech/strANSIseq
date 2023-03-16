@@ -4,9 +4,9 @@
 #include <cstdarg>
 #include <iostream>
 #include <string>
-#include <vector>
-#include <unistd.h>
 #include <termios.h>
+#include <unistd.h>
+#include <vector>
 
 #define LOG(...)             \
     if(m_verbose)            \
@@ -95,13 +95,36 @@ class CLI
         m_verbose = verbose;
         if(verbose >= 0 && verbose < 9)
             m_id = fstr(id, {FG_YELLOW + verbose});
+        if(m_verbose > 0)
+        {
+            printf("[%s]", m_id.c_str());
+            fflush(stdout);
+            int x;
+            //get cursor position to get the indent
+            get_pos(
+                &x,
+                &m_indent); //careful could be block if cin or getchar is used in another thread
+            printf(" ESC init\xd"); //erase the line
+        }
     };
 
-    std::string &cli_id() { return m_id; };
+    std::string cli_id() { return m_id; };
+    void set_cli_id(std::string id)
+    {
+        m_id = id;
+        printf("[%s]", m_id.c_str());
+        fflush(stdout);
+        int x;
+        //get cursor position to get the indent
+        get_pos(
+            &x,
+            &m_indent); //careful could be block if cin or getchar is used in another thread
+        printf(" ESC init\xd"); //erase the line
+    }
 
     void log(std::string msg, bool id = false)
     {
-        if(m_verbose)
+        if(m_verbose > 0)
         {
             if(id)
                 printf("%*s%s", m_indent, "", msg.c_str());
@@ -113,19 +136,12 @@ class CLI
 
     void logln(std::string msg, bool id = false)
     {
-        if(m_verbose)
+        if(m_verbose > 0)
         {
             if(id)
-	      {
-                printf("[%s]", m_id.c_str());
-		fflush(stdout);
-		int x;
-		get_pos(&x, &m_indent);
-		printf(" %s\n", msg.c_str());
-	      }
+                printf("[%s] %s\n", m_id.c_str(), msg.c_str());
             else
                 printf("%*s%s\n", m_indent, "", msg.c_str());
-
         }
     };
 
@@ -139,7 +155,7 @@ class CLI
     private:
     int m_verbose;
     std::string m_id;
-    int m_indent=10;
+    int m_indent = 10;
 };
 }; // namespace ESC
 
