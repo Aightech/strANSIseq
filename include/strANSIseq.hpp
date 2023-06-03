@@ -152,7 +152,7 @@ class CLI
 
     static int s_verbose_max;
 
-    private:
+    protected:
     int m_verbose;
     std::string m_id;
     int m_indent = 10;
