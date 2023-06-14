@@ -1,5 +1,5 @@
 set(EXEC_NAME strANSIseq)
-set(PROJECT_VERSION 1.13)
+set(PROJECT_VERSION 1.14)
 
 ###### Special libraries ######
 set(EXTRA_LIBS "")

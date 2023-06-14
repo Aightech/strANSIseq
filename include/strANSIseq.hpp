@@ -112,6 +112,8 @@ class CLI
     void set_cli_id(std::string id)
     {
         m_id = id;
+        if(m_verbose >= 0 && m_verbose < 9)
+            m_id = fstr(id, {FG_YELLOW + m_verbose});
         printf("[%s]", m_id.c_str());
         fflush(stdout);
         int x;
@@ -145,9 +147,12 @@ class CLI
         }
     };
 
-    std::string log_error(std::string msg)
+    void log_error(std::string msg)
     {
-        return "[" + m_id + "] " + fstr("ERROR: ", {BOLD, FG_RED}) + msg;
+        msg = fstr("ERROR: ", {BOLD, FG_RED}) + std::string(__FILE__) + "[" + std::to_string(__LINE__) +
+                "]: " + msg;
+        //write on stderr
+        fprintf(stderr, "[%s] %s\n", m_id.c_str(), msg.c_str());
     };
 
     static int s_verbose_max;
