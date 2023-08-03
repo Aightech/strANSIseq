@@ -150,8 +150,11 @@ class CLI
     std::string log_error(std::string msg)
     {
         //write on stderr
-        fprintf(stderr, "[%s] %s\n", m_id.c_str(), (fstr("ERROR: ", {BOLD, FG_RED}) + std::string(__FILE__) + "[" + std::to_string(__LINE__) +
-                "]: " + msg).c_str());
+        fprintf(stderr, "[%s] %s\n", m_id.c_str(),
+                (fstr("ERROR: ", {BOLD, FG_RED}) + std::string(__FILE__) + "[" +
+                 std::to_string(__LINE__) + "]:")
+                    .c_str());
+        fprintf(stderr, "%*s%s\n", m_indent, "", msg.c_str());
         return msg;
     };
 
