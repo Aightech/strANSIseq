@@ -148,10 +148,8 @@ class CLI
     {
         //write on stderr
         fprintf(stderr, "[%s] %s\n", m_id.c_str(),
-                (fstr("ERROR: ", {BOLD, FG_RED}) + std::string(__FILE__) + "[" +
-                 std::to_string(__LINE__) + "]:")
+                (fstr("ERROR: ", {BOLD, FG_RED}) + ": " + msg )
                     .c_str());
-        fprintf(stderr, "%*s%s\n", m_indent, "", msg.c_str());
         return msg;
     };
 
