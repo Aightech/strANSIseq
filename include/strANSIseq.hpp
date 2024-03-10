@@ -153,6 +153,14 @@ class CLI
         return msg;
     };
 
+    std::string byte2bits(uint8_t byte)
+    {
+        std::string bits;
+        for(int i = 7; i >= 0; i--)
+            bits += (byte & (1 << i)) ? "1" : "0";
+        return bits;
+    };
+
     static int s_verbose_max;
 
     protected:
