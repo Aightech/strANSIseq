@@ -4,7 +4,11 @@
 #include <cstdarg>
 #include <iostream>
 #include <string>
+
+#ifndef _WIN32
 #include <termios.h>
+#endif
+
 #include <unistd.h>
 #include <vector>
 

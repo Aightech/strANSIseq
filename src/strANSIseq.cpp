@@ -35,7 +35,6 @@ std::string move_to(int line, int column)
 
 int get_pos(int *y, int *x)
 {
-
     char buf[30] = {0};
     int ret, i, pow;
     char ch;
@@ -43,6 +42,7 @@ int get_pos(int *y, int *x)
     *y = 0;
     *x = 0;
 
+#ifdef __linux__
     struct termios term, restore;
 
     tcgetattr(0, &term);
@@ -51,12 +51,33 @@ int get_pos(int *y, int *x)
     tcsetattr(0, TCSANOW, &term);
 
     write(1, "\033[6n", 4);
+#elif _WIN32 //to be tested
+    DWORD dwRead;
+    char c;
+    DWORD dwMode;
+    HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 
+    GetConsoleMode(hStdin, &dwMode);
+    SetConsoleMode(hStdin,
+                   dwMode & (~ENABLE_ECHO_INPUT) & (~ENABLE_LINE_INPUT));
+
+    WriteFile(hStdin, "\033[6n", 4, &dwRead, NULL);
+#endif
+
+#ifdef __linux__
     for(i = 0, ch = 0; ch != 'R'; i++)
     {
         ret = read(0, &ch, 1);
         buf[i] = ch;
     }
+#elif _WIN32 //to be tested
+    for(i = 0, ch = 0; ch != 'R'; i++)
+    {
+        ReadFile(hStdin, &c, 1, &dwRead, NULL);
+        buf[i] = c;
+        ch = c;
+    }
+#endif
 
     for(i -= 2, pow = 1; buf[i] != ';'; i--, pow *= 10)
         *x = *x + (buf[i] - '0') * pow;
@@ -64,7 +85,12 @@ int get_pos(int *y, int *x)
     for(i--, pow = 1; buf[i] != '['; i--, pow *= 10)
         *y = *y + (buf[i] - '0') * pow;
 
+#ifdef __linux__
     tcsetattr(0, TCSANOW, &restore);
+#elif _WIN32 //to be tested
+    SetConsoleMode(hStdin, dwMode);
+#endif
+
     return 0;
 }
 
