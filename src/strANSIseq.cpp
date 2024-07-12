@@ -7,9 +7,16 @@ int CLI::s_verbose_max = -1;
 
 std::string fstr(std::string v, std::initializer_list<int> l)
 {
+	#ifdef __linux__
     std::string seq_str = "\x1b[";
     for(auto i : l) seq_str += ";" + std::to_string(i);
     return seq_str + "m" + v + "\x1b[0m";
+	#elif _WIN32
+	std::string seq_str = "`e[";
+    for(auto i : l) seq_str += ";" + std::to_string(i);
+    return seq_str + "m" + v + "`e[0m oo";
+	#endif
+	
 }
 
 std::string fstr_link(std::string link, std::string text)
