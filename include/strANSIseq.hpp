@@ -4,7 +4,14 @@
 #include <cstdarg>
 #include <iostream>
 #include <string>
+
+#ifdef __linux__
 #include <termios.h>
+#elif _WIN32 
+#include <windows.h>
+#endif
+
+
 #include <unistd.h>
 #include <vector>
 
@@ -80,7 +87,7 @@ std::string move_down(int n = 1);
 std::string move_right(int n = 1);
 
 std::string move_left(int n = 1);
-
+			
 std::string move_to(int line, int column);
 
 int get_pos(int *y, int *x);
