@@ -100,8 +100,9 @@ class CLI
         if(verbose > s_verbose_max)
             s_verbose_max = verbose;
         m_verbose = verbose;
+        m_name = id;
         if(verbose >= 0 && verbose < 9)
-            m_id = fstr(id, {FG_YELLOW + verbose});
+            m_id = fstr(m_name, {FG_YELLOW + verbose});
         if(m_verbose > 0)
         {
             printf("[%s]", m_id.c_str());
@@ -168,11 +169,34 @@ class CLI
         return bits;
     };
 
+    void set_verbose(int verbose)
+    {
+        m_verbose = verbose;
+        if(verbose > s_verbose_max)
+            s_verbose_max = verbose;
+        if(verbose >= 0 && verbose < 9)
+            m_id = fstr(m_name, {FG_YELLOW + verbose});
+        if(m_verbose > 0)
+        {
+            printf("[%s]", m_id.c_str());
+            fflush(stdout);
+            int x;
+            //get cursor position to get the indent
+            get_pos(
+                &x,
+                &m_indent); //careful could be block if cin or getchar is used in another thread
+            printf(" ESC init\xd"); //erase the line
+        }
+    };
+
+    int get_verbose() { return m_verbose; };
+
     static int s_verbose_max;
 
     protected:
     int m_verbose;
     std::string m_id;
+    std::string m_name;
     int m_indent = 10;
 };
 }; // namespace ESC
