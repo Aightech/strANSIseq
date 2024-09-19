@@ -1,6 +1,6 @@
 # strANSIseq
 
-Simple library to ..............
+Simple library to format terminal text with ANSI escape sequences
 
 # Building source code
 
