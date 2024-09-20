@@ -7,7 +7,9 @@
 
 #ifdef __linux__
 #include <termios.h>
-#elif _WIN32 
+#elif __APPLE__
+#include <termios.h>
+#elif _WIN32
 #include <windows.h>
 #endif
 

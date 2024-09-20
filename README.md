@@ -1,6 +1,6 @@
 # strANSIseq
 
-Simple library to ..............
+Simple library to format terminal text with ANSI escape sequences
 
 # Building source code
 
@@ -18,6 +18,8 @@ When the project have been built, you can run:
 ./strANSIseq -h
 ```
 to get the demonstration app usage.
+
+Note that zsh(macOS default) does not support fully function, and you need to run the app in bash.
 
 # Example
 Open the ![main.cpp](cpp:src/main.cpp) file to get an example how to use the lib.
