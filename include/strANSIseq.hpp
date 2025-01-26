@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <iostream>
 #include <string>
+#include <stdint.h>
 
 #ifdef __linux__
 #include <termios.h>
