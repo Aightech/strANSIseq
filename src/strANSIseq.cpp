@@ -16,13 +16,12 @@ std::string fstr(std::string v, std::initializer_list<int> l)
     for(auto i : l) seq_str += ";" + std::to_string(i);
     return seq_str + "m" + v + "`e[0m oo";
 #endif
-
 }
 
 std::string fstr_link(std::string link, std::string text)
 {
-    return "\e]8;;" + link + "\e\\" + ((text == "") ? link : text) +
-           "\e]8;;\e\\";
+    return "\x1B]8;;" + link + "\x1B\\" + ((text == "") ? link : text) +
+           "\x1B]8;;\x1B\\";
 }
 
 std::string move_type(int n, char type)
@@ -43,7 +42,7 @@ std::string move_to(int line, int column)
 int get_pos(int *y, int *x)
 {
     char buf[30] = {0};
-    int ret, i, pow;
+    int i, pow;
     char ch;
 
     *y = 0;
@@ -72,9 +71,10 @@ int get_pos(int *y, int *x)
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)
+    // int ret;
     for(i = 0, ch = 0; ch != 'R'; i++)
     {
-        ret = read(0, &ch, 1);
+        // ret = read(0, &ch, 1);
         buf[i] = ch;
     }
 #elif _WIN32 //to be tested
