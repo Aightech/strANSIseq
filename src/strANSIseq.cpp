@@ -8,9 +8,9 @@ int CLI::s_verbose_max = -1;
 std::string fstr(std::string v, std::initializer_list<int> l)
 {
 #if defined(__linux__) || defined(__APPLE__)
-    std::string seq_str = "\x1b[";
+    std::string seq_str = "\x1B[";
     for(auto i : l) seq_str += ";" + std::to_string(i);
-    return seq_str + "m" + v + "\x1b[0m";
+    return seq_str + "m" + v + "\x1B[0m";
 #elif _WIN32
     std::string seq_str = "`e[";
     for(auto i : l) seq_str += ";" + std::to_string(i);
@@ -26,7 +26,7 @@ std::string fstr_link(std::string link, std::string text)
 
 std::string move_type(int n, char type)
 {
-    return "\x1b[" + std::to_string(n) + type;
+    return "\x1B[" + std::to_string(n) + type;
 }
 
 std::string move_up(int n) { return move_type(n, 'A'); }
@@ -36,7 +36,7 @@ std::string move_left(int n) { return move_type(n, 'D'); }
 
 std::string move_to(int line, int column)
 {
-    return "\x1b[" + std::to_string(line) + ";" + std::to_string(column) + "f";
+    return "\x1B[" + std::to_string(line) + ";" + std::to_string(column) + "f";
 }
 
 int get_pos(int *y, int *x)
@@ -71,10 +71,10 @@ int get_pos(int *y, int *x)
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)
-    // int ret;
+    int ret = 0;
     for(i = 0, ch = 0; ch != 'R'; i++)
     {
-        // ret = read(0, &ch, 1);
+        ret = read(0, &ch, 1);
         buf[i] = ch;
     }
 #elif _WIN32 //to be tested
