@@ -98,6 +98,8 @@ int get_pos(int *y, int *x)
     SetConsoleMode(hStdin, dwMode);
 #endif
 
+    if(ret < 0)
+        return -1;
     return 0;
 }
 
