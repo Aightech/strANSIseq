@@ -206,8 +206,10 @@ else()
   target_link_libraries(${LIB_NAME}
     PUBLIC ${EXTRA_LIBS})
   target_include_directories(${LIB_NAME}
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   )
+  target_compile_options(${LIB_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+
 
   if(BUILD_PYTHON)
     # check if there is an extern folder and if pybind11 is present
@@ -236,7 +238,7 @@ else()
         PRIVATE Python3::Python
       )
       target_include_directories(${PYTHON_LIB_NAME} # 
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include
       )
       #copy the resulting .so file to the script folder
       add_custom_command(TARGET ${PYTHON_LIB_NAME} POST_BUILD
@@ -266,9 +268,53 @@ else()
         PUBLIC ${LIB_NAME}
         PUBLIC ${TOOL_LIBS})
       target_include_directories(${EXEC_NAME}
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
+        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
     endforeach()
   endif()
+
+
+  ###### Create package ######
+  # Install the library
+  install(TARGETS ${LIB_NAME}
+    EXPORT ${LIB_NAME} 
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+  )
+
+  # Install the headers
+  install(DIRECTORY include/ DESTINATION include)
+
+  # Export the targets to a script
+  install(EXPORT ${LIB_NAME}
+    FILE ${EXEC_NAME}Config.cmake
+    NAMESPACE ${EXEC_NAME}::
+    DESTINATION lib/cmake/${EXEC_NAME}
+  )
+
+  include(CMakePackageConfigHelpers)
+  # Create a ConfigVersion.cmake file
+  write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}ConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion  # AnyNewerVersion, SameMajorVersion, SameMinorVersion, ExactVersion
+  )
+
+  # Create a Config.cmake file
+  configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in" # input file
+    "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}Config.cmake" # output file
+    INSTALL_DESTINATION lib/cmake/${EXEC_NAME}
+  ) 
+
+  # Install the Config.cmake file
+  install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${EXEC_NAME}ConfigVersion.cmake"
+    DESTINATION lib/cmake/${EXEC_NAME}
+  )
+
+
 
 endif()
 
