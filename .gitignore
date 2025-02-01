@@ -21,7 +21,7 @@
 !.gitmodules
 !README.org
 !CMakeLists.txt
-!CMakeConfig.txt
+!CMakeConfig.cmake
 !cmake
 !cmake/*
 !Doxyfile
