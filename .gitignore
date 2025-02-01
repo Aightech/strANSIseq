@@ -21,9 +21,9 @@
 !.gitmodules
 !README.org
 !CMakeLists.txt
-!CMakeFunctions.txt
 !CMakeConfig.txt
-!Config.cmake.in
+!cmake
+!cmake/*
 !Doxyfile
 !todo.org
 !/.dir-locals.el

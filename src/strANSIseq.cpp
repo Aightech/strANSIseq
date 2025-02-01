@@ -56,7 +56,8 @@ int get_pos(int *y, int *x)
     term.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(0, TCSANOW, &term);
 
-    write(1, "\033[6n", 4);
+    ssize_t n = write(1, "\033[6n", 4);
+    (void)n;
 #elif _WIN32 //to be tested
     DWORD dwRead;
     char c;
