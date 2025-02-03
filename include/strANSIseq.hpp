@@ -3,8 +3,8 @@
 
 #include <cstdarg>
 #include <iostream>
-#include <string>
 #include <stdint.h>
+#include <string>
 
 #ifdef __linux__
 #include <termios.h>
@@ -13,7 +13,6 @@
 #elif _WIN32
 #include <windows.h>
 #endif
-
 
 #include <unistd.h>
 #include <vector>
@@ -90,7 +89,7 @@ std::string move_down(int n = 1);
 std::string move_right(int n = 1);
 
 std::string move_left(int n = 1);
-			
+
 std::string move_to(int line, int column);
 
 int get_pos(int *y, int *x);
@@ -115,7 +114,10 @@ class CLI
             get_pos(
                 &x,
                 &m_indent); //careful could be block if cin or getchar is used in another thread
-            printf(" ESC init\xd"); //erase the line
+            printf("\xd"); //erase the line
+            for(int i = 0; i < m_indent; i++) printf(" ");
+            printf("\xd"); //erase the line
+            fflush(stdout);
         }
     };
 
@@ -125,11 +127,18 @@ class CLI
         m_id = id;
         if(m_verbose >= 0 && m_verbose < 9)
             m_id = fstr(id, {FG_YELLOW + m_verbose});
+
+        printf("[%s]", m_id.c_str());
+        fflush(stdout);
         int x;
         //get cursor position to get the indent
         get_pos(
             &x,
             &m_indent); //careful could be block if cin or getchar is used in another thread
+        printf("\xd"); //erase the line
+        for(int i = 0; i < m_indent; i++) printf(" ");
+        printf("\xd"); //erase the line
+        fflush(stdout);
     }
 
     void log(std::string msg, bool id = false)
@@ -159,16 +168,14 @@ class CLI
     {
         //write on stderr
         fprintf(stderr, "[%s] %s\n", m_id.c_str(),
-                (fstr("ERROR: ", {BOLD, FG_RED}) + ": " + msg )
-                    .c_str());
+                (fstr("ERROR: ", {BOLD, FG_RED}) + ": " + msg).c_str());
         return msg;
     };
 
     std::string byte2bits(uint8_t byte)
     {
         std::string bits;
-        for(int i = 7; i >= 0; i--)
-            bits += (byte & (1 << i)) ? "1" : "0";
+        for(int i = 7; i >= 0; i--) bits += (byte & (1 << i)) ? "1" : "0";
         return bits;
     };
 
