@@ -107,27 +107,18 @@ class CLI
             m_id = fstr(m_name, {FG_YELLOW + verbose});
         if(m_verbose > 0)
         {
-            printf("[%s]", m_id.c_str());
-            fflush(stdout);
-            int x;
-            //get cursor position to get the indent
-            get_pos(
-                &x,
-                &m_indent); //careful could be block if cin or getchar is used in another thread
-            printf("\xd"); //erase the line
-            for(int i = 0; i < m_indent; i++) printf(" ");
-            printf("\xd"); //erase the line
-            fflush(stdout);
+            this->get_indent();
         }
     };
 
-    std::string cli_id() { return m_id; };
-    void set_cli_id(std::string id)
+    int get_indent()
     {
-        m_id = id;
-        if(m_verbose >= 0 && m_verbose < 9)
-            m_id = fstr(id, {FG_YELLOW + m_verbose});
-
+        //new line
+        int prev_x, prev_y;
+        get_pos(
+            &prev_y,
+            &prev_x); //careful could be block if cin or getchar is used in another thread
+        printf("\n");
         printf("[%s]", m_id.c_str());
         fflush(stdout);
         int x;
@@ -138,7 +129,22 @@ class CLI
         printf("\xd"); //erase the line
         for(int i = 0; i < m_indent; i++) printf(" ");
         printf("\xd"); //erase the line
+        //move the cursor up
+        printf("\033[1A");
+        for(int i = 0; i < prev_x-1; i++) printf("\033[1C");
         fflush(stdout);
+        return m_indent;
+    };
+
+    std::string cli_id() { return m_id; };
+    void set_cli_id(std::string id)
+    {
+        m_id = id;
+        if(m_verbose >= 0 && m_verbose < 9)
+            m_id = fstr(id, {FG_YELLOW + m_verbose});
+
+        if(m_verbose > 0)
+            this->get_indent();
     }
 
     void log(std::string msg, bool id = false)
