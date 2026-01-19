@@ -57,6 +57,7 @@ include(CMakeConfig.cmake)
 project(${EXEC_NAME} VERSION ${PROJECT_VERSION})
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_PYTHON "Build python wrapper" OFF)
+option(BUILD_TESTS "Build unit tests" OFF)
 
 ###### LIBRARY NAME ######
 set(LIB_NAME ${EXEC_NAME}.${PROJECT_VERSION})
@@ -65,6 +66,21 @@ set(LIB_NAME ${EXEC_NAME}.${PROJECT_VERSION})
 ###### include helper functions ######
 include(cmake/ColorLogs.cmake)
 include(cmake/CMakeFunctions.cmake)
+
+
+###### Check submodules are initialized ######
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+  file(GLOB LIB_SUBDIRS LIST_DIRECTORIES true "${CMAKE_CURRENT_SOURCE_DIR}/lib/*")
+  foreach(subdir ${LIB_SUBDIRS})
+    if(IS_DIRECTORY ${subdir} AND NOT EXISTS "${subdir}/CMakeLists.txt")
+      get_filename_component(subdir_name ${subdir} NAME)
+      message(FATAL_ERROR
+        "Submodule '${subdir_name}' not initialized.\n"
+        "Run: git submodule update --init --recursive\n"
+        "Or:  ./scripts/setup.sh")
+    endif()
+  endforeach()
+endif()
 
 
 ###### Check if the project is already built ######
@@ -139,5 +155,9 @@ else() #if not, build the target
 
 endif()
 
-
-
+###### Build tests if enabled ######
+if(BUILD_TESTS AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
+    add_subdirectory(tests)
+  endif()
+endif()

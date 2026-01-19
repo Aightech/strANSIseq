@@ -36,3 +36,8 @@
 !/LICENSE
 !/CONTRIBUTING.md
 
+!/DEPENDENCIES.md
+!/CLAUDE.md
+!/.gitattributes
+!/scripts
+!/tests
